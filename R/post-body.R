@@ -26,7 +26,13 @@ parseBody <- function(body, charset = "UTF-8"){
   # Is it JSON data?
   if (stri_startswith_fixed(body, "{")) {
     ret <- safeFromJSON(body)
-  } else {
+  }
+  # Is it XML?
+  if (stri_startswith_fixed(body, "<")) {
+    ret <- xml2::as_list(xml2::read_xml(body))
+  }
+
+  else {
     # If not handle it as a query string
       ret <- parseQS(body)
   }
